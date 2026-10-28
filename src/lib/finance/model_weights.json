@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "model_type": "Multinomial Logistic Regression (L-BFGS)",
+    "trained_samples": 4000,
+    "num_features": 9,
+    "classes": [
+      "Conservative",
+      "Moderate",
+      "Aggressive"
+    ],
+    "training_date": "2026-10-29 03:46:43"
+  },
+  "intercepts": {
+    "Aggressive": 1.725,
+    "Conservative": -4.351,
+    "Moderate": 2.626
+  },
+  "feature_specs": [
+    {
+      "key": "risk_tolerance",
+      "label": "Risk tolerance",
+      "mean": 5.607,
+      "std": 2.205,
+      "weights": {
+        "Aggressive": 3.371,
+        "Conservative": -3.492,
+        "Moderate": 0.121
+      }
+    },
+    {
+      "key": "horizon_years",
+      "label": "Investment horizon",
+      "mean": 9.922,
+      "std": 5.914,
+      "weights": {
+        "Aggressive": 1.074,
+        "Conservative": -1.191,
+        "Moderate": 0.116
+      }
+    },
+    {
+      "key": "age",
+      "label": "Age",
+      "mean": 33.864,
+      "std": 8.329,
+      "weights": {
+        "Aggressive": -0.663,
+        "Conservative": 0.652,
+        "Moderate": 0.011
+      }
+    },
+    {
+      "key": "savings_rate",
+      "label": "Savings rate",
+      "mean": 0.466,
+      "std": 0.144,
+      "weights": {
+        "Aggressive": 0.383,
+        "Conservative": -0.438,
+        "Moderate": 0.055
+      }
+    },
+    {
+      "key": "income_stability",
+      "label": "Income stability",
+      "mean": 6.386,
+      "std": 2.036,
+      "weights": {
+        "Aggressive": 0.319,
+        "Conservative": -0.345,
+        "Moderate": 0.026
+      }
+    },
+    {
+      "key": "emergency_months",
+      "label": "Emergency fund",
+      "mean": 5.53,
+      "std": 3.559,
+      "weights": {
+        "Aggressive": 0.613,
+        "Conservative": -0.79,
+        "Moderate": 0.177
+      }
+    },
+    {
+      "key": "debt_burden",
+      "label": "Debt burden",
+      "mean": 0.085,
+      "std": 0.082,
+      "weights": {
+        "Aggressive": -0.256,
+        "Conservative": 0.309,
+        "Moderate": -0.053
+      }
+    },
+    {
+      "key": "dependents",
+      "label": "Dependents",
+      "mean": 1.329,
+      "std": 1.127,
+      "weights": {
+        "Aggressive": -0.163,
+        "Conservative": 0.192,
+        "Moderate": -0.03
+      }
+    },
+    {
+      "key": "net_worth_months",
+      "label": "Net-worth buffer",
+      "mean": 22.642,
+      "std": 16.25,
+      "weights": {
+        "Aggressive": -0.138,
+        "Conservative": 0.176,
+        "Moderate": -0.038
+      }
+    }
+  ],
+  "global_importance": [
+    {
+      "label": "Risk tolerance",
+      "importance": 2.328
+    },
+    {
+      "label": "Investment horizon",
+      "importance": 0.794
+    },
+    {
+      "label": "Emergency fund",
+      "importance": 0.527
+    },
+    {
+      "label": "Age",
+      "importance": 0.442
+    },
+    {
+      "label": "Savings rate",
+      "importance": 0.292
+    },
+    {
+      "label": "Income stability",
+      "importance": 0.23
+    },
+    {
+      "label": "Debt burden",
+      "importance": 0.206
+    },
+    {
+      "label": "Dependents",
+      "importance": 0.128
+    },
+    {
+      "label": "Net-worth buffer",
+      "importance": 0.117
+    }
+  ],
+  "leaderboard": [
+    {
+      "model": "Logistic Regression (deployed)",
+      "accuracy": 0.822,
+      "f1": 0.768,
+      "rocAuc": 0.938,
+      "selected": true,
+      "notes": "Deployed: Exact closed-form SHAP explainability and low inference latency"
+    },
+    {
+      "model": "Gradient Boosting",
+      "accuracy": 0.821,
+      "f1": 0.753,
+      "rocAuc": 0.935,
+      "selected": false,
+      "notes": "Offline benchmark model (Gradient ensemble)"
+    },
+    {
+      "model": "XGBoost",
+      "accuracy": 0.818,
+      "f1": 0.75,
+      "rocAuc": 0.934,
+      "selected": false,
+      "notes": "Offline benchmark model (XGBoost ensemble)"
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 0.799,
+      "f1": 0.622,
+      "rocAuc": 0.925,
+      "selected": false,
+      "notes": "Offline benchmark model (Random ensemble)"
+    }
+  ]
+}

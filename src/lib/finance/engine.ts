@@ -3,9 +3,8 @@
  * for FinAdvisor XAI.
  *
  * All amounts are in Indian Rupees (INR, formatted as en-IN).
- * All scoring logic (feature engineering, health score, risk prediction,
- * SHAP-style local contributions, portfolio recommendations, goal planning,
- * and wealth projection) lives here.
+ * Scoring logic utilizes weights trained directly by the Python ML pipeline
+ * (ml/train.py) and exported to model_weights.json.
  */
 
 import type {
@@ -20,6 +19,7 @@ import type {
   RiskClass,
   RiskPrediction,
 } from "./types";
+import trainedWeights from "./model_weights.json";
 
 export const RISK_CLASSES: RiskClass[] = ["Conservative", "Moderate", "Aggressive"];
 
@@ -173,10 +173,7 @@ export function analyseHealth(p: FinancialProfile): HealthReport {
     grade,
     metrics,
     strengths: sorted.filter((m) => m.status !== "weak").slice(0, 3),
-    weaknesses: sorted
-      .filter((m) => m.status !== "strong")
-      .reverse()
-      .slice(0, 3),
+    weaknesses: sorted.filter((m) => m.status !== "strong").reverse().slice(0, 3),
     surplus,
     savingsRate: f.savingsRate,
     emergencyMonths: f.emergencyMonths,
@@ -189,100 +186,62 @@ export function analyseHealth(p: FinancialProfile): HealthReport {
 /* 3. Multinomial Logistic Regression Scorer & Explainable AI (SHAP)  */
 /* ------------------------------------------------------------------ */
 
-interface FeatureSpec {
+export interface FeatureSpec {
   key: keyof EngineeredFeatures;
   label: string;
-  mean: number; // Baseline mean for SHAP explanation: E[x]
-  std: number; // Standard deviation for normalization: (x - mean) / std
+  mean: number; // Baseline empirical mean E[x] from ML training
+  std: number;  // Standard deviation for standardization
   weights: Record<RiskClass, number>;
   format: (v: number) => string;
 }
 
-/**
- * 9 Standardized features with calibrated multinomial logistic regression weights.
- * Because the model is additive, the exact Shapley contribution of feature i
- * for class c is: contribution_i = w_{c, i} * ((x_i - E[x_i]) / std_i).
- */
-const FEATURE_SPECS: FeatureSpec[] = [
-  {
-    key: "riskTolerance",
-    label: "Risk tolerance",
-    mean: 5.5,
-    std: 2.4,
-    weights: { Conservative: -1.15, Moderate: 0.1, Aggressive: 1.05 },
-    format: (v) => `${v}/10`,
-  },
-  {
-    key: "horizonYears",
-    label: "Investment horizon",
-    mean: 10,
-    std: 7,
-    weights: { Conservative: -0.85, Moderate: 0.15, Aggressive: 0.7 },
-    format: (v) => `${v} yrs`,
-  },
-  {
-    key: "age",
-    label: "Age",
-    mean: 35,
-    std: 11,
-    weights: { Conservative: 0.7, Moderate: 0.05, Aggressive: -0.75 },
-    format: (v) => `${v} yrs`,
-  },
-  {
-    key: "savingsRate",
-    label: "Savings rate",
-    mean: 0.2,
-    std: 0.14,
-    weights: { Conservative: -0.45, Moderate: 0.2, Aggressive: 0.5 },
-    format: (v) => pct(v),
-  },
-  {
-    key: "incomeStability",
-    label: "Income stability",
-    mean: 6,
-    std: 2.2,
-    weights: { Conservative: -0.4, Moderate: 0.15, Aggressive: 0.45 },
-    format: (v) => `${v}/10`,
-  },
-  {
-    key: "emergencyMonths",
-    label: "Emergency fund",
-    mean: 5,
-    std: 4.5,
-    weights: { Conservative: -0.35, Moderate: 0.12, Aggressive: 0.35 },
-    format: (v) => `${v.toFixed(1)} mo`,
-  },
-  {
-    key: "debtBurden",
-    label: "Debt burden",
-    mean: 0.18,
-    std: 0.13,
-    weights: { Conservative: 0.55, Moderate: -0.05, Aggressive: -0.6 },
-    format: (v) => pct(v),
-  },
-  {
-    key: "dependents",
-    label: "Dependents",
-    mean: 1.4,
-    std: 1.2,
-    weights: { Conservative: 0.35, Moderate: 0.0, Aggressive: -0.4 },
-    format: (v) => `${v}`,
-  },
-  {
-    key: "netWorthMonths",
-    label: "Net-worth buffer",
-    mean: 18,
-    std: 16,
-    weights: { Conservative: -0.2, Moderate: 0.05, Aggressive: 0.3 },
-    format: (v) => `${v.toFixed(0)} mo`,
-  },
-];
-
-const INTERCEPTS: Record<RiskClass, number> = {
-  Conservative: -0.15,
-  Moderate: 0.55,
-  Aggressive: -0.25,
+const FORMATTERS: Record<keyof EngineeredFeatures, (v: number) => string> = {
+  riskTolerance: (v) => `${v}/10`,
+  horizonYears: (v) => `${v} yrs`,
+  age: (v) => `${v} yrs`,
+  savingsRate: (v) => pct(v),
+  incomeStability: (v) => `${v}/10`,
+  emergencyMonths: (v) => `${v.toFixed(1)} mo`,
+  debtBurden: (v) => pct(v),
+  dependents: (v) => `${v}`,
+  netWorthMonths: (v) => `${v.toFixed(0)} mo`,
+  expenseRatio: (v) => pct(v),
+  investableRatio: (v) => pct(v),
 };
+
+const FEATURE_KEY_MAP: Record<string, keyof EngineeredFeatures> = {
+  risk_tolerance: "riskTolerance",
+  horizon_years: "horizonYears",
+  age: "age",
+  savings_rate: "savingsRate",
+  income_stability: "incomeStability",
+  emergency_months: "emergencyMonths",
+  debt_burden: "debtBurden",
+  dependents: "dependents",
+  net_worth_months: "netWorthMonths",
+};
+
+/**
+ * 9 Standardized features loaded directly from the Python ML training pipeline
+ * (ml/train.py output in model_weights.json).
+ * Exact closed-form Shapley contribution: contribution_i = w_{c, i} * ((x_i - mean_i) / std_i).
+ */
+export const FEATURE_SPECS: FeatureSpec[] = trainedWeights.feature_specs.map((spec) => {
+  const tsKey = FEATURE_KEY_MAP[spec.key] ?? (spec.key as keyof EngineeredFeatures);
+  return {
+    key: tsKey,
+    label: spec.label,
+    mean: spec.mean,
+    std: spec.std,
+    weights: spec.weights as Record<RiskClass, number>,
+    format: FORMATTERS[tsKey] ?? ((v: number) => String(v)),
+  };
+});
+
+export const INTERCEPTS: Record<RiskClass, number> = trainedWeights.intercepts as Record<
+  RiskClass,
+  number
+>;
 
 function softmax(scores: Record<RiskClass, number>): Record<RiskClass, number> {
   const max = Math.max(...RISK_CLASSES.map((c) => scores[c]));
@@ -306,7 +265,9 @@ export function predictRisk(p: FinancialProfile): RiskPrediction {
   }
 
   const probabilities = softmax(scores);
-  const riskClass = RISK_CLASSES.reduce((a, b) => (probabilities[a] >= probabilities[b] ? a : b));
+  const riskClass = RISK_CLASSES.reduce((a, b) =>
+    probabilities[a] >= probabilities[b] ? a : b,
+  );
 
   // Exact linear SHAP contributions for the winning predicted class
   const contributions: FeatureContribution[] = FEATURE_SPECS.map((spec) => {
@@ -346,42 +307,12 @@ export function globalImportance(): { label: string; importance: number }[] {
   })).sort((a, b) => b.importance - a.importance);
 }
 
-/** Offline model-comparison benchmark leaderboard. */
-export const MODEL_LEADERBOARD: ModelBenchmark[] = [
-  {
-    model: "XGBoost",
-    accuracy: 0.926,
-    f1: 0.923,
-    rocAuc: 0.978,
-    selected: false,
-    notes: "Offline cross-validated benchmark on synthetic cohort",
-  },
-  {
-    model: "Gradient Boosting",
-    accuracy: 0.918,
-    f1: 0.914,
-    rocAuc: 0.972,
-    selected: false,
-    notes: "High accuracy tree ensemble benchmark",
-  },
-  {
-    model: "Random Forest",
-    accuracy: 0.911,
-    f1: 0.905,
-    rocAuc: 0.969,
-    selected: false,
-    notes: "Bagged forest benchmark",
-  },
-  {
-    model: "Multinomial Logistic Regression (deployed)",
-    accuracy: 0.902,
-    f1: 0.899,
-    rocAuc: 0.964,
-    selected: true,
-    notes:
-      "Deployed: selected for exact, closed-form SHAP explainability and low inference latency",
-  },
-];
+/**
+ * Offline model-comparison benchmark leaderboard loaded directly
+ * from the 5-fold Stratified Cross-Validation pipeline.
+ */
+export const MODEL_LEADERBOARD: ModelBenchmark[] =
+  trainedWeights.leaderboard as ModelBenchmark[];
 
 /* ------------------------------------------------------------------ */
 /* 4. Personalized Investment Recommendation                           */
