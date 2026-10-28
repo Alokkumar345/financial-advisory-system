@@ -41,9 +41,17 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Financial Health Dashboard — FinAdvisor XAI" },
-      { name: "description", content: "AI-driven personalised financial planning with explainable risk profiling, allocation and goal tracking." },
+      {
+        name: "description",
+        content:
+          "AI-driven personalised financial planning with explainable risk profiling, allocation and goal tracking.",
+      },
       { property: "og:title", content: "Financial Health Dashboard — FinAdvisor XAI" },
-      { property: "og:description", content: "Track income, savings rate, health score, risk profile and recommended allocation in one dashboard." },
+      {
+        property: "og:description",
+        content:
+          "Track income, savings rate, health score, risk profile and recommended allocation in one dashboard.",
+      },
     ],
   }),
   component: Dashboard,
@@ -92,14 +100,14 @@ function Dashboard() {
             <span className="text-xs font-semibold tracking-wider uppercase text-primary-foreground/75">
               Financial Health Status
             </span>
-            <span className={`rounded-md border px-2.5 py-0.5 text-xs font-bold ${getGradeVariant(health.grade)}`}>
+            <span
+              className={`rounded-md border px-2.5 py-0.5 text-xs font-bold ${getGradeVariant(health.grade)}`}
+            >
               {health.grade}
             </span>
           </div>
           <div className="flex items-baseline gap-3">
-            <span className="font-display text-4xl font-extrabold md:text-5xl">
-              {health.score}
-            </span>
+            <span className="font-display text-4xl font-extrabold md:text-5xl">{health.score}</span>
             <span className="text-lg text-primary-foreground/70">/ 100</span>
           </div>
           <p className="max-w-2xl text-sm leading-relaxed text-primary-foreground/90">
@@ -113,7 +121,11 @@ function Dashboard() {
               View Recommended Portfolio <ArrowUpRight className="ml-1.5 size-4" />
             </Link>
           </Button>
-          <Button asChild variant="outline" className="bg-white/10 hover:bg-white/20 border-white/20 text-white">
+          <Button
+            asChild
+            variant="outline"
+            className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
+          >
             <Link to="/simulator">
               <SlidersHorizontal className="mr-1.5 size-4" /> Run Simulator
             </Link>
@@ -138,7 +150,9 @@ function Dashboard() {
         <StatCard
           label="Monthly Surplus"
           value={currency(health.surplus)}
-          hint={health.surplus >= 0 ? "Positive cash flow available to invest" : "Cash flow deficit"}
+          hint={
+            health.surplus >= 0 ? "Positive cash flow available to invest" : "Cash flow deficit"
+          }
           tone={health.surplus > 0 ? "success" : "destructive"}
           icon={<PiggyBank className="size-4" />}
         />
@@ -161,7 +175,10 @@ function Dashboard() {
                 Emergency Buffer Alert ({health.emergencyMonths.toFixed(1)} Months)
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                Your liquid savings of {currency(profile.currentSavings)} cover {health.emergencyMonths.toFixed(1)} months of outflow. We advise channeling surplus to liquid deposits until reaching 6 months ({currency((profile.monthlyExpenses + profile.monthlyEmi) * 6)}).
+                Your liquid savings of {currency(profile.currentSavings)} cover{" "}
+                {health.emergencyMonths.toFixed(1)} months of outflow. We advise channeling surplus
+                to liquid deposits until reaching 6 months (
+                {currency((profile.monthlyExpenses + profile.monthlyEmi) * 6)}).
               </p>
             </div>
           </div>
@@ -173,7 +190,8 @@ function Dashboard() {
                 Robust Emergency Cushion ({health.emergencyMonths.toFixed(1)} Months)
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                Your liquid reserve exceeds the recommended 6-month safety threshold, providing resilience against unforeseen events.
+                Your liquid reserve exceeds the recommended 6-month safety threshold, providing
+                resilience against unforeseen events.
               </p>
             </div>
           </div>
@@ -187,7 +205,8 @@ function Dashboard() {
                 Elevated Debt Burden ({pct(health.debtBurden)} of Income)
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                Debt EMIs consume more than 35% of monthly income. Prioritizing prepayment of high-cost loans will de-risk your cash flows.
+                Debt EMIs consume more than 35% of monthly income. Prioritizing prepayment of
+                high-cost loans will de-risk your cash flows.
               </p>
             </div>
           </div>
@@ -197,7 +216,8 @@ function Dashboard() {
             <div>
               <p className="font-semibold">Healthy Debt Management ({pct(health.debtBurden)})</p>
               <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                Your debt-to-income ratio is well controlled under 35%, leaving ample surplus for systematic long-term investing.
+                Your debt-to-income ratio is well controlled under 35%, leaving ample surplus for
+                systematic long-term investing.
               </p>
             </div>
           </div>
@@ -227,17 +247,18 @@ function Dashboard() {
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-foreground">{m.label}</span>
-                    <span className="text-[11px] text-muted-foreground">({Math.round(m.weight * 100)}% weight)</span>
+                    <span className="text-[11px] text-muted-foreground">
+                      ({Math.round(m.weight * 100)}% weight)
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-semibold">{m.display}</span>
-                    <span className="text-xs text-muted-foreground">({Math.round(m.score)}/100)</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({Math.round(m.score)}/100)
+                    </span>
                   </div>
                 </div>
-                <Progress
-                  value={m.score}
-                  className="h-2"
-                />
+                <Progress value={m.score} className="h-2" />
                 <p className="text-xs text-muted-foreground">{m.hint}</p>
               </div>
             ))}
@@ -251,7 +272,9 @@ function Dashboard() {
               <ShieldCheck className="size-5 text-primary" /> Risk & Recommended Asset Mix
             </CardTitle>
             <CardDescription>
-              Multinomial Classifier: <span className="font-semibold text-foreground">{risk.riskClass}</span> ({pct(risk.confidence, 0)} confidence)
+              Multinomial Classifier:{" "}
+              <span className="font-semibold text-foreground">{risk.riskClass}</span> (
+              {pct(risk.confidence, 0)} confidence)
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
@@ -276,7 +299,14 @@ function Dashboard() {
               </ResponsiveContainer>
             </div>
             <div className="mt-2 text-center text-xs text-muted-foreground">
-              Expected Return: <span className="font-semibold text-foreground">{pct(recommendation.expectedReturn)}</span> · Volatility: <span className="font-semibold text-foreground">{pct(recommendation.volatility)}</span>
+              Expected Return:{" "}
+              <span className="font-semibold text-foreground">
+                {pct(recommendation.expectedReturn)}
+              </span>{" "}
+              · Volatility:{" "}
+              <span className="font-semibold text-foreground">
+                {pct(recommendation.volatility)}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -291,10 +321,15 @@ function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {health.strengths.length === 0 ? (
-              <p className="text-xs text-muted-foreground">Continue building your baseline metrics.</p>
+              <p className="text-xs text-muted-foreground">
+                Continue building your baseline metrics.
+              </p>
             ) : (
               health.strengths.map((m) => (
-                <div key={m.key} className="flex items-start justify-between gap-2 border-b border-border/60 pb-2.5 last:border-0 last:pb-0">
+                <div
+                  key={m.key}
+                  className="flex items-start justify-between gap-2 border-b border-border/60 pb-2.5 last:border-0 last:pb-0"
+                >
                   <div>
                     <p className="font-medium text-foreground">{m.label}</p>
                     <p className="text-xs text-muted-foreground">{m.hint}</p>
@@ -318,10 +353,15 @@ function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {health.weaknesses.length === 0 ? (
-              <p className="text-xs text-muted-foreground">All evaluated financial pillars are in good standing!</p>
+              <p className="text-xs text-muted-foreground">
+                All evaluated financial pillars are in good standing!
+              </p>
             ) : (
               health.weaknesses.map((m) => (
-                <div key={m.key} className="flex items-start justify-between gap-2 border-b border-border/60 pb-2.5 last:border-0 last:pb-0">
+                <div
+                  key={m.key}
+                  className="flex items-start justify-between gap-2 border-b border-border/60 pb-2.5 last:border-0 last:pb-0"
+                >
                   <div>
                     <p className="font-medium text-foreground">{m.label}</p>
                     <p className="text-xs text-muted-foreground">{m.hint}</p>
@@ -372,7 +412,10 @@ function Dashboard() {
             })}
             {plans.length === 0 && (
               <div className="text-center py-4 text-xs text-muted-foreground">
-                No financial goals set yet. <Link to="/goals" className="text-primary underline">Add your first goal</Link>
+                No financial goals set yet.{" "}
+                <Link to="/goals" className="text-primary underline">
+                  Add your first goal
+                </Link>
               </div>
             )}
           </CardContent>
@@ -383,9 +426,12 @@ function Dashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">Top ML Risk Drivers (SHAP Local Contributions)</CardTitle>
+                <CardTitle className="text-lg">
+                  Top ML Risk Drivers (SHAP Local Contributions)
+                </CardTitle>
                 <CardDescription>
-                  Exact signed contributions pushing toward or away from {risk.riskClass} classification
+                  Exact signed contributions pushing toward or away from {risk.riskClass}{" "}
+                  classification
                 </CardDescription>
               </div>
               <Button asChild variant="outline" size="sm">
@@ -437,7 +483,12 @@ function Dashboard() {
         <Info className="size-4 text-primary" />
         <AlertTitle className="text-sm font-semibold">Regulatory and Safety Notice</AlertTitle>
         <AlertDescription className="text-xs text-muted-foreground leading-relaxed mt-1">
-          FinAdvisor XAI is an educational decision-support software. All health scores, machine learning risk classifications, and portfolio allocations are deterministic mathematical illustrations based on historical averages and user-submitted inputs. They do not constitute guaranteed returns, tax advice, or certified investment recommendations under SEBI guidelines. Before executing financial decisions, always consult a licensed SEBI-registered Investment Adviser (RIA).
+          FinAdvisor XAI is an educational decision-support software. All health scores, machine
+          learning risk classifications, and portfolio allocations are deterministic mathematical
+          illustrations based on historical averages and user-submitted inputs. They do not
+          constitute guaranteed returns, tax advice, or certified investment recommendations under
+          SEBI guidelines. Before executing financial decisions, always consult a licensed
+          SEBI-registered Investment Adviser (RIA).
         </AlertDescription>
       </Alert>
     </AppShell>

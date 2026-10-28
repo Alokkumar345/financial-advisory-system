@@ -52,9 +52,16 @@ export const Route = createFileRoute("/goals")({
   head: () => ({
     meta: [
       { title: "Financial Goal Planner — FinAdvisor XAI" },
-      { name: "description", content: "Plan house, education, retirement and emergency goals with required monthly SIPs." },
+      {
+        name: "description",
+        content:
+          "Plan house, education, retirement and emergency goals with required monthly SIPs.",
+      },
       { property: "og:title", content: "Financial Goal Planner — FinAdvisor XAI" },
-      { property: "og:description", content: "See the monthly investment each goal needs and whether it fits your surplus." },
+      {
+        property: "og:description",
+        content: "See the monthly investment each goal needs and whether it fits your surplus.",
+      },
     ],
   }),
   component: GoalsPage,
@@ -217,7 +224,14 @@ function GoalsPage() {
                           </Badge>
                         </div>
                         <CardDescription>
-                          Target: <span className="font-semibold text-foreground">{currency(p.goal.targetAmount)}</span> in <span className="font-semibold text-foreground">{p.goal.years} years</span>
+                          Target:{" "}
+                          <span className="font-semibold text-foreground">
+                            {currency(p.goal.targetAmount)}
+                          </span>{" "}
+                          in{" "}
+                          <span className="font-semibold text-foreground">
+                            {p.goal.years} years
+                          </span>
                         </CardDescription>
                       </div>
 
@@ -253,19 +267,25 @@ function GoalsPage() {
                   <CardContent className="space-y-3">
                     <div className="grid gap-3 sm:grid-cols-3 text-xs">
                       <div className="rounded-lg bg-secondary/50 p-2.5">
-                        <span className="text-muted-foreground block mb-0.5">Required Monthly SIP</span>
+                        <span className="text-muted-foreground block mb-0.5">
+                          Required Monthly SIP
+                        </span>
                         <span className="font-display text-base font-bold text-primary">
                           {currency(p.requiredMonthly)}
                         </span>
                       </div>
                       <div className="rounded-lg bg-secondary/50 p-2.5">
-                        <span className="text-muted-foreground block mb-0.5">Projected Value of Savings</span>
+                        <span className="text-muted-foreground block mb-0.5">
+                          Projected Value of Savings
+                        </span>
                         <span className="font-display text-base font-semibold text-foreground">
                           {currency(p.futureValueOfSaved)}
                         </span>
                       </div>
                       <div className="rounded-lg bg-secondary/50 p-2.5">
-                        <span className="text-muted-foreground block mb-0.5">Remaining Funding Gap</span>
+                        <span className="text-muted-foreground block mb-0.5">
+                          Remaining Funding Gap
+                        </span>
                         <span className="font-display text-base font-semibold text-foreground">
                           {currency(p.gap)}
                         </span>
@@ -274,8 +294,12 @@ function GoalsPage() {
 
                     <div className="space-y-1.5 pt-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Funded: {currency(p.goal.saved)} ({progressPercent}%)</span>
-                        <span>Remaining: {currency(Math.max(0, p.goal.targetAmount - p.goal.saved))}</span>
+                        <span>
+                          Funded: {currency(p.goal.saved)} ({progressPercent}%)
+                        </span>
+                        <span>
+                          Remaining: {currency(Math.max(0, p.goal.targetAmount - p.goal.saved))}
+                        </span>
                       </div>
                       <Progress value={progressPercent} className="h-2" />
                     </div>
@@ -297,9 +321,12 @@ function GoalsPage() {
           {plans.length > 0 && (
             <Card className="card-elevated">
               <CardHeader>
-                <CardTitle className="text-base">Required Monthly SIP vs Surplus Capacity</CardTitle>
+                <CardTitle className="text-base">
+                  Required Monthly SIP vs Surplus Capacity
+                </CardTitle>
                 <CardDescription>
-                  Checking required monthly investment against your available surplus ({currency(health.surplus)})
+                  Checking required monthly investment against your available surplus (
+                  {currency(health.surplus)})
                 </CardDescription>
               </CardHeader>
               <CardContent className="h-64">
@@ -314,8 +341,18 @@ function GoalsPage() {
                     />
                     <Tooltip formatter={(v: number) => currency(v)} />
                     <Legend wrapperStyle={{ fontSize: 11 }} />
-                    <Bar name="Required Monthly SIP" dataKey="required" fill="var(--color-chart-1)" radius={[4, 4, 0, 0]} />
-                    <Bar name="Monthly Surplus" dataKey="capacity" fill="var(--color-chart-2)" radius={[4, 4, 0, 0]} />
+                    <Bar
+                      name="Required Monthly SIP"
+                      dataKey="required"
+                      fill="var(--color-chart-1)"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      name="Monthly Surplus"
+                      dataKey="capacity"
+                      fill="var(--color-chart-2)"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

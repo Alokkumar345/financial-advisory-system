@@ -72,8 +72,12 @@ export function AppShell({
               <Activity className="size-5" />
             </div>
             <div>
-              <span className="font-display text-sm font-bold tracking-tight text-white">FinAdvisor XAI</span>
-              <span className="block text-[10px] text-sidebar-foreground/60">Explainable Wealth AI</span>
+              <span className="font-display text-sm font-bold tracking-tight text-white">
+                FinAdvisor XAI
+              </span>
+              <span className="block text-[10px] text-sidebar-foreground/60">
+                Explainable Wealth AI
+              </span>
             </div>
           </Link>
         </div>
@@ -106,7 +110,8 @@ export function AppShell({
               <span>Educational Tool</span>
             </div>
             <p className="mt-1">
-              Not SEBI regulated advice. For investment decisions, consult a certified financial advisor.
+              Not SEBI regulated advice. For investment decisions, consult a certified financial
+              advisor.
             </p>
           </div>
         </div>
@@ -147,7 +152,10 @@ export function AppShell({
               <div className="flex items-center justify-end gap-1.5">
                 <p className="text-sm font-medium">{session?.name ?? profile.name}</p>
                 {session?.isDemo && (
-                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-amber-500/40 text-amber-600 dark:text-amber-400">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] px-1.5 py-0 border-amber-500/40 text-amber-600 dark:text-amber-400"
+                  >
                     Demo
                   </Badge>
                 )}

@@ -16,18 +16,38 @@ import { AppShell } from "@/components/app/AppShell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useAnalysis, useProfile } from "@/lib/finance/store";
 import { currency, pct, projectWealth } from "@/lib/finance/engine";
-import { Info, PieChart as PieIcon, ShieldAlert, Sparkles, TrendingUp, CheckCircle2 } from "lucide-react";
+import {
+  Info,
+  PieChart as PieIcon,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+  CheckCircle2,
+} from "lucide-react";
 
 export const Route = createFileRoute("/recommendations")({
   head: () => ({
     meta: [
       { title: "Investment Recommendation — FinAdvisor XAI" },
-      { name: "description", content: "Personalised asset allocation across equity, debt, mutual funds, FDs and gold." },
+      {
+        name: "description",
+        content: "Personalised asset allocation across equity, debt, mutual funds, FDs and gold.",
+      },
       { property: "og:title", content: "Investment Recommendation — FinAdvisor XAI" },
-      { property: "og:description", content: "An explainable allocation built from your risk profile, horizon and goals." },
+      {
+        property: "og:description",
+        content: "An explainable allocation built from your risk profile, horizon and goals.",
+      },
     ],
   }),
   component: RecommendationPage,
@@ -67,7 +87,10 @@ function RecommendationPage() {
           Educational Decision Support (Not Regulated Financial Advice)
         </AlertTitle>
         <AlertDescription className="mt-1 text-xs text-foreground/80 leading-relaxed">
-          This asset allocation is a model-generated, rule-guarded illustration designed for financial literacy and scenario planning. It does NOT promise guaranteed returns or constitute certified advisory under SEBI regulations. Historical returns do not guarantee future performance. Consult a certified financial planner before deploying capital.
+          This asset allocation is a model-generated, rule-guarded illustration designed for
+          financial literacy and scenario planning. It does NOT promise guaranteed returns or
+          constitute certified advisory under SEBI regulations. Historical returns do not guarantee
+          future performance. Consult a certified financial planner before deploying capital.
         </AlertDescription>
       </Alert>
 
@@ -111,7 +134,14 @@ function RecommendationPage() {
               <div>
                 <CardTitle className="text-lg">Portfolio Breakdown & Rationale</CardTitle>
                 <CardDescription>
-                  Blended expected return: <span className="font-semibold text-foreground">{pct(recommendation.expectedReturn)}</span> · Estimated annual volatility: <span className="font-semibold text-foreground">{pct(recommendation.volatility)}</span>
+                  Blended expected return:{" "}
+                  <span className="font-semibold text-foreground">
+                    {pct(recommendation.expectedReturn)}
+                  </span>{" "}
+                  · Estimated annual volatility:{" "}
+                  <span className="font-semibold text-foreground">
+                    {pct(recommendation.volatility)}
+                  </span>
                 </CardDescription>
               </div>
               <Badge variant="outline" className="px-3 py-1 font-semibold">
@@ -137,9 +167,7 @@ function RecommendationPage() {
                   );
                   return (
                     <TableRow key={slice.asset}>
-                      <TableCell className="font-semibold text-foreground">
-                        {slice.asset}
-                      </TableCell>
+                      <TableCell className="font-semibold text-foreground">{slice.asset}</TableCell>
                       <TableCell className="text-right font-mono font-bold text-primary">
                         {slice.percent}%
                       </TableCell>
@@ -197,7 +225,9 @@ function RecommendationPage() {
               <div>
                 <CardTitle className="text-lg">Compounded Wealth Projection</CardTitle>
                 <CardDescription>
-                  Projecting initial corpus ({currency(profile.existingInvestments)}) + monthly investment ({currency(recommendation.monthlyInvestment)}) over {profile.horizonYears} years at {pct(recommendation.expectedReturn)}
+                  Projecting initial corpus ({currency(profile.existingInvestments)}) + monthly
+                  investment ({currency(recommendation.monthlyInvestment)}) over{" "}
+                  {profile.horizonYears} years at {pct(recommendation.expectedReturn)}
                 </CardDescription>
               </div>
               {finalProjection && (

@@ -80,10 +80,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "FinAdvisor XAI — Explainable Financial Planning" },
-      { name: "description", content: "AI-driven personalised financial planning and investment advisory with explainable machine learning." },
+      {
+        name: "description",
+        content:
+          "AI-driven personalised financial planning and investment advisory with explainable machine learning.",
+      },
       { name: "author", content: "FinAdvisor XAI" },
       { property: "og:title", content: "FinAdvisor XAI — Explainable Financial Planning" },
-      { property: "og:description", content: "Financial health scoring, ML risk profiling and explainable investment guidance." },
+      {
+        property: "og:description",
+        content: "Financial health scoring, ML risk profiling and explainable investment guidance.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

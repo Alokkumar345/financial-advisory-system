@@ -18,7 +18,14 @@ import { AppShell } from "@/components/app/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAnalysis, useProfile } from "@/lib/finance/store";
 import { RISK_CLASSES, pct, engineerFeatures } from "@/lib/finance/engine";
@@ -28,9 +35,16 @@ export const Route = createFileRoute("/risk")({
   head: () => ({
     meta: [
       { title: "Risk Assessment — FinAdvisor XAI" },
-      { name: "description", content: "ML-based investor risk profiling with per-feature explanations and model comparison." },
+      {
+        name: "description",
+        content:
+          "ML-based investor risk profiling with per-feature explanations and model comparison.",
+      },
       { property: "og:title", content: "Risk Assessment — FinAdvisor XAI" },
-      { property: "og:description", content: "See your predicted risk class, confidence and the factors that drove it." },
+      {
+        property: "og:description",
+        content: "See your predicted risk class, confidence and the factors that drove it.",
+      },
     ],
   }),
   component: RiskPage,
@@ -113,12 +127,24 @@ function RiskPage() {
               {RISK_CLASSES.map((c) => (
                 <div key={c} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
-                    <span className={`size-2 rounded-full ${c === risk.riskClass ? "bg-primary" : "bg-muted-foreground/40"}`} />
-                    <span className={c === risk.riskClass ? "font-semibold text-foreground" : "text-muted-foreground"}>
+                    <span
+                      className={`size-2 rounded-full ${c === risk.riskClass ? "bg-primary" : "bg-muted-foreground/40"}`}
+                    />
+                    <span
+                      className={
+                        c === risk.riskClass
+                          ? "font-semibold text-foreground"
+                          : "text-muted-foreground"
+                      }
+                    >
                       {c}
                     </span>
                   </div>
-                  <span className={c === risk.riskClass ? "font-bold text-primary" : "text-muted-foreground"}>
+                  <span
+                    className={
+                      c === risk.riskClass ? "font-bold text-primary" : "text-muted-foreground"
+                    }
+                  >
                     {pct(risk.probabilities[c], 1)}
                   </span>
                 </div>
@@ -126,7 +152,10 @@ function RiskPage() {
             </div>
 
             <div className="text-xs text-muted-foreground leading-relaxed">
-              Base intercept for {risk.riskClass}: <code className="rounded bg-muted px-1 py-0.5 font-mono">{risk.baseValue.toFixed(2)}</code>
+              Base intercept for {risk.riskClass}:{" "}
+              <code className="rounded bg-muted px-1 py-0.5 font-mono">
+                {risk.baseValue.toFixed(2)}
+              </code>
             </div>
           </CardContent>
         </Card>
@@ -142,13 +171,20 @@ function RiskPage() {
               <BarChart data={probData} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                 <XAxis dataKey="name" stroke="var(--color-muted-foreground)" fontSize={12} />
-                <YAxis unit="%" stroke="var(--color-muted-foreground)" fontSize={12} domain={[0, 100]} />
+                <YAxis
+                  unit="%"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={12}
+                  domain={[0, 100]}
+                />
                 <Tooltip formatter={(v: number) => `${v}%`} />
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                   {probData.map((d) => (
                     <Cell
                       key={d.name}
-                      fill={d.name === risk.riskClass ? "var(--color-chart-1)" : "var(--color-chart-2)"}
+                      fill={
+                        d.name === risk.riskClass ? "var(--color-chart-1)" : "var(--color-chart-2)"
+                      }
                     />
                   ))}
                 </Bar>
@@ -161,13 +197,19 @@ function RiskPage() {
         <Card className="card-elevated">
           <CardHeader>
             <CardTitle>Investor Feature Radar</CardTitle>
-            <CardDescription>Multi-dimensional normalized fingerprint (0–100 scale)</CardDescription>
+            <CardDescription>
+              Multi-dimensional normalized fingerprint (0–100 scale)
+            </CardDescription>
           </CardHeader>
           <CardContent className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
                 <PolarGrid stroke="var(--color-border)" />
-                <PolarAngleAxis dataKey="subject" fontSize={10} stroke="var(--color-muted-foreground)" />
+                <PolarAngleAxis
+                  dataKey="subject"
+                  fontSize={10}
+                  stroke="var(--color-muted-foreground)"
+                />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="var(--color-border)" />
                 <Radar
                   name="Normalized Score"
@@ -187,12 +229,21 @@ function RiskPage() {
           <CardHeader>
             <CardTitle>Per-Feature Local Contributions (Linear SHAP)</CardTitle>
             <CardDescription>
-              Exact contribution: <code className="text-xs bg-muted px-1.5 py-0.5 rounded">weight × ((x - mean) / std)</code>. Positive values push towards {risk.riskClass}, negative values pull towards other classes.
+              Exact contribution:{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                weight × ((x - mean) / std)
+              </code>
+              . Positive values push towards {risk.riskClass}, negative values pull towards other
+              classes.
             </CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={contribData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 10 }}>
+              <BarChart
+                data={contribData}
+                layout="vertical"
+                margin={{ top: 10, right: 30, left: 40, bottom: 10 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
                 <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={11} />
                 <YAxis
@@ -226,7 +277,10 @@ function RiskPage() {
         <Info className="size-4 text-primary" />
         <AlertTitle className="text-sm font-semibold">Educational Model Notice</AlertTitle>
         <AlertDescription className="text-xs text-muted-foreground leading-relaxed mt-1">
-          The risk profile generated by FinAdvisor XAI is an algorithmic estimation based on statistical modeling. It should be used solely as decision support. For formal risk suitability analysis compliant with SEBI regulations, consult an accredited financial advisory firm.
+          The risk profile generated by FinAdvisor XAI is an algorithmic estimation based on
+          statistical modeling. It should be used solely as decision support. For formal risk
+          suitability analysis compliant with SEBI regulations, consult an accredited financial
+          advisory firm.
         </AlertDescription>
       </Alert>
     </AppShell>

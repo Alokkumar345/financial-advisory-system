@@ -100,7 +100,12 @@
   --chart-3: oklch(0.75 0.14 78);
   --chart-4: oklch(0.58 0.15 300);
   --chart-5: oklch(0.62 0.16 25);
-  --gradient-hero: linear-gradient(135deg, oklch(0.34 0.1 245) 0%, oklch(0.42 0.11 210) 55%, oklch(0.55 0.12 172) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.34 0.1 245) 0%,
+    oklch(0.42 0.11 210) 55%,
+    oklch(0.55 0.12 172) 100%
+  );
   --shadow-card: 0 1px 2px oklch(0.3 0.05 245 / 6%), 0 12px 28px -18px oklch(0.3 0.05 245 / 35%);
   --sidebar: oklch(0.24 0.045 250);
   --sidebar-foreground: oklch(0.93 0.012 240);

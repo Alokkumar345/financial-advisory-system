@@ -3,7 +3,10 @@ import { z } from "zod";
 
 const ChatMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
-  content: z.string().min(1, "Message cannot be empty").max(4000, "Message cannot exceed 4000 characters"),
+  content: z
+    .string()
+    .min(1, "Message cannot be empty")
+    .max(4000, "Message cannot exceed 4000 characters"),
 });
 
 const ChatInputSchema = z.object({
@@ -33,7 +36,9 @@ function generateLocalAdvisorResponse(userQuery: string, context: string): strin
   const emergencyFund = savingsMatch ? savingsMatch[2] : "5.4 months";
 
   const allocationMatch = context.match(/Allocation: ([^;]+);/);
-  const allocation = allocationMatch ? allocationMatch[1] : "Equity 30%, Mutual Funds 25%, Debt 20%";
+  const allocation = allocationMatch
+    ? allocationMatch[1]
+    : "Equity 30%, Mutual Funds 25%, Debt 20%";
 
   if (query.includes("health score") || query.includes("score") || query.includes("grade")) {
     return (
@@ -43,7 +48,14 @@ function generateLocalAdvisorResponse(userQuery: string, context: string): strin
     );
   }
 
-  if (query.includes("risk") || query.includes("classify") || query.includes("profile") || query.includes("moderate") || query.includes("conservative") || query.includes("aggressive")) {
+  if (
+    query.includes("risk") ||
+    query.includes("classify") ||
+    query.includes("profile") ||
+    query.includes("moderate") ||
+    query.includes("conservative") ||
+    query.includes("aggressive")
+  ) {
     return (
       `The model classified your risk profile as **${riskClass}** with ${riskConfidence}% confidence using a multinomial logistic regression scorer. The primary drivers are your self-reported risk tolerance, investment horizon, age, and existing savings buffer.\n\n` +
       `This classification balances growth potential with drawdown protection, ensuring you don't take risks inconsistent with your financial cushions.\n\n` +
@@ -51,7 +63,12 @@ function generateLocalAdvisorResponse(userQuery: string, context: string): strin
     );
   }
 
-  if (query.includes("fix") || query.includes("improve") || query.includes("priority") || query.includes("what should i")) {
+  if (
+    query.includes("fix") ||
+    query.includes("improve") ||
+    query.includes("priority") ||
+    query.includes("what should i")
+  ) {
     return (
       `Based on your numbers, here are two high-impact priorities:\n` +
       `1. **Emergency Buffer**: Ensure your liquid savings cover at least 6 months of living expenses and EMIs (currently ${emergencyFund}).\n` +
@@ -61,7 +78,12 @@ function generateLocalAdvisorResponse(userQuery: string, context: string): strin
     );
   }
 
-  if (query.includes("allocation") || query.includes("portfolio") || query.includes("equity") || query.includes("goal")) {
+  if (
+    query.includes("allocation") ||
+    query.includes("portfolio") ||
+    query.includes("equity") ||
+    query.includes("goal")
+  ) {
     return (
       `Your recommended allocation is: **${allocation}**. This mix aligns with your ${riskClass} risk classification and timeline, following the standard 110-minus-age guideline for equity exposure while maintaining sufficient debt and gold for downside protection.\n\n` +
       `Returns are variable and market-dependent. Regular monthly SIPs help average purchase costs over market cycles.\n\n` +
@@ -86,7 +108,8 @@ export const askAssistant = createServerFn({ method: "POST" })
   .validator((input: unknown) => ChatInputSchema.parse(input))
   .handler(async ({ data }) => {
     const key = process.env["LOVABLE_API_KEY"] || process.env["GEMINI_API_KEY"];
-    const lastUserMessage = [...data.messages].reverse().find((m) => m.role === "user")?.content || "";
+    const lastUserMessage =
+      [...data.messages].reverse().find((m) => m.role === "user")?.content || "";
 
     // If no external key is present in environment, serve via the built-in financial intelligence engine
     if (!key) {
@@ -123,10 +146,16 @@ export const askAssistant = createServerFn({ method: "POST" })
       });
 
       if (res.status === 429) {
-        return { ok: false as const, error: "High traffic: Rate limit reached. Please wait a few moments and try again." };
+        return {
+          ok: false as const,
+          error: "High traffic: Rate limit reached. Please wait a few moments and try again.",
+        };
       }
       if (res.status === 402) {
-        return { ok: false as const, error: "AI credits are exhausted. Please recharge your Lovable AI balance." };
+        return {
+          ok: false as const,
+          error: "AI credits are exhausted. Please recharge your Lovable AI balance.",
+        };
       }
       if (!res.ok) {
         // Fall back gracefully to local expert engine if gateway errors

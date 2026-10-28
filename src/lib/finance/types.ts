@@ -5,13 +5,7 @@ import { z } from "zod";
 export type RiskClass = "Conservative" | "Moderate" | "Aggressive";
 
 export type GoalKind =
-  | "House"
-  | "Higher Education"
-  | "Emergency Fund"
-  | "Retirement"
-  | "Car"
-  | "Travel"
-  | "Other";
+  "House" | "Higher Education" | "Emergency Fund" | "Retirement" | "Car" | "Travel" | "Other";
 
 export type GoalPriority = "High" | "Medium" | "Low";
 

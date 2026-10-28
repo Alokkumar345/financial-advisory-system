@@ -1,6 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Activity, ShieldCheck, Sparkles, TrendingUp, Lock, ArrowRight, UserCheck } from "lucide-react";
+import {
+  Activity,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Lock,
+  ArrowRight,
+  UserCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,9 +21,16 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — FinAdvisor XAI" },
-      { name: "description", content: "Sign in or register with Supabase Auth to access your explainable financial planning dashboard." },
+      {
+        name: "description",
+        content:
+          "Sign in or register with Supabase Auth to access your explainable financial planning dashboard.",
+      },
       { property: "og:title", content: "Sign in — FinAdvisor XAI" },
-      { property: "og:description", content: "AI-driven financial planning with explainable machine learning risk profiling." },
+      {
+        property: "og:description",
+        content: "AI-driven financial planning with explainable machine learning risk profiling.",
+      },
     ],
   }),
   component: AuthPage,
@@ -97,7 +112,8 @@ function AuthPage() {
           </h2>
           <p className="max-w-lg text-base leading-relaxed text-primary-foreground/90">
             A comprehensive, transparent wealth intelligence system powered by multinomial logistic
-            regression, closed-form SHAP feature contributions, rule-guarded asset allocation, and goal feasibility simulations.
+            regression, closed-form SHAP feature contributions, rule-guarded asset allocation, and
+            goal feasibility simulations.
           </p>
 
           <div className="grid gap-3 pt-4 sm:grid-cols-2">
@@ -105,14 +121,18 @@ function AuthPage() {
               <ShieldCheck className="mt-0.5 size-5 shrink-0 text-accent" />
               <div>
                 <p className="font-medium text-sm">Explainable Risk Profiling</p>
-                <p className="text-xs text-primary-foreground/75">Calibrated probabilities & exact feature contributions</p>
+                <p className="text-xs text-primary-foreground/75">
+                  Calibrated probabilities & exact feature contributions
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-3 rounded-xl bg-white/10 p-3.5 backdrop-blur">
               <TrendingUp className="mt-0.5 size-5 shrink-0 text-accent" />
               <div>
                 <p className="font-medium text-sm">Rule-Guarded Allocation</p>
-                <p className="text-xs text-primary-foreground/75">Dynamic tilts based on horizon, age, & liquidity</p>
+                <p className="text-xs text-primary-foreground/75">
+                  Dynamic tilts based on horizon, age, & liquidity
+                </p>
               </div>
             </div>
           </div>
@@ -121,8 +141,8 @@ function AuthPage() {
         <div className="rounded-xl border border-white/15 bg-white/5 p-4 text-xs text-primary-foreground/80 backdrop-blur">
           <p className="font-semibold text-primary-foreground">Ethical & Safety Notice</p>
           <p className="mt-1 leading-relaxed">
-            FinAdvisor XAI is an educational decision-support tool. It does not provide guaranteed returns
-            and is not a substitute for a licensed SEBI-registered financial advisor.
+            FinAdvisor XAI is an educational decision-support tool. It does not provide guaranteed
+            returns and is not a substitute for a licensed SEBI-registered financial advisor.
           </p>
         </div>
       </div>

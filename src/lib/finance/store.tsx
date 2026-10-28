@@ -33,7 +33,11 @@ interface ProfileContextType {
   deleteGoal: (id: string) => Promise<void>;
   signInDemo: (customName?: string) => void;
   signInWithSupabase: (email: string, password: string) => Promise<{ error?: string }>;
-  signUpWithSupabase: (name: string, email: string, password: string) => Promise<{ error?: string }>;
+  signUpWithSupabase: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
 }
 
@@ -69,18 +73,33 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
             name: data.name || SAMPLE_PROFILE.name,
             age: Number(data.age) || SAMPLE_PROFILE.age,
             occupation: data.occupation || SAMPLE_PROFILE.occupation,
-            dependents: Number(data.dependents) ?? SAMPLE_PROFILE.dependents,
+            dependents:
+              data.dependents != null ? Number(data.dependents) : SAMPLE_PROFILE.dependents,
             monthlyIncome: Number(data.monthly_income) || SAMPLE_PROFILE.monthlyIncome,
-            monthlyExpenses: Number(data.monthly_expenses) ?? SAMPLE_PROFILE.monthlyExpenses,
-            monthlyEmi: Number(data.monthly_emi) ?? SAMPLE_PROFILE.monthlyEmi,
-            currentSavings: Number(data.current_savings) ?? SAMPLE_PROFILE.currentSavings,
+            monthlyExpenses:
+              data.monthly_expenses != null
+                ? Number(data.monthly_expenses)
+                : SAMPLE_PROFILE.monthlyExpenses,
+            monthlyEmi:
+              data.monthly_emi != null ? Number(data.monthly_emi) : SAMPLE_PROFILE.monthlyEmi,
+            currentSavings:
+              data.current_savings != null
+                ? Number(data.current_savings)
+                : SAMPLE_PROFILE.currentSavings,
             existingInvestments:
-              Number(data.existing_investments) ?? SAMPLE_PROFILE.existingInvestments,
-            monthlyInvestment: Number(data.monthly_investment) ?? SAMPLE_PROFILE.monthlyInvestment,
+              data.existing_investments != null
+                ? Number(data.existing_investments)
+                : SAMPLE_PROFILE.existingInvestments,
+            monthlyInvestment:
+              data.monthly_investment != null
+                ? Number(data.monthly_investment)
+                : SAMPLE_PROFILE.monthlyInvestment,
             horizonYears: Number(data.horizon_years) || SAMPLE_PROFILE.horizonYears,
             riskTolerance: Number(data.risk_tolerance) || SAMPLE_PROFILE.riskTolerance,
             incomeStability: Number(data.income_stability) || SAMPLE_PROFILE.incomeStability,
-            goals: Array.isArray(data.goals) ? (data.goals as unknown as Goal[]) : SAMPLE_PROFILE.goals,
+            goals: Array.isArray(data.goals)
+              ? (data.goals as unknown as Goal[])
+              : SAMPLE_PROFILE.goals,
           };
           setProfile(loaded);
           persistLocal(loaded);
@@ -142,7 +161,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           setSession(newSession);
           try {
             localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(newSession));
-          } catch {}
+          } catch {
+            /* ignore storage error */
+          }
           await fetchRemoteProfile(user.id);
         } else if (event === "SIGNED_OUT") {
           setSession((prev) => (prev?.isDemo ? prev : null));
@@ -237,7 +258,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setSession(demoSession);
     try {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(demoSession));
-    } catch {}
+    } catch {
+      /* ignore storage error */
+    }
   }, []);
 
   const signInWithSupabase = useCallback(async (email: string, password: string) => {
@@ -246,9 +269,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) return { error: error.message };
       if (data?.user) {
-        const metaName = (data.user.user_metadata as Record<string, unknown> | undefined)?.[
-          "name"
-        ];
+        const metaName = (data.user.user_metadata as Record<string, unknown> | undefined)?.["name"];
         const s: Session = {
           id: data.user.id,
           name: typeof metaName === "string" ? metaName : email.split("@")[0] || "User",
@@ -258,7 +279,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         setSession(s);
         try {
           localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(s));
-        } catch {}
+        } catch {
+          /* ignore storage error */
+        }
       }
       return {};
     } catch (err: unknown) {
@@ -289,7 +312,9 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
           setSession(s);
           try {
             localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(s));
-          } catch {}
+          } catch {
+            /* ignore storage error */
+          }
           const newProfile = { ...SAMPLE_PROFILE, name };
           setProfile(newProfile);
           persistLocal(newProfile);
@@ -308,11 +333,15 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
-    } catch {}
+    } catch {
+      /* ignore signout error */
+    }
     setSession(null);
     try {
       localStorage.removeItem(SESSION_STORAGE_KEY);
-    } catch {}
+    } catch {
+      /* ignore storage error */
+    }
   }, []);
 
   const value = useMemo(

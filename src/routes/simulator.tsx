@@ -31,9 +31,16 @@ export const Route = createFileRoute("/simulator")({
   head: () => ({
     meta: [
       { title: "What-If Simulator — FinAdvisor XAI" },
-      { name: "description", content: "Change income, expenses, SIP amount, horizon or risk and watch outcomes update live." },
+      {
+        name: "description",
+        content:
+          "Change income, expenses, SIP amount, horizon or risk and watch outcomes update live.",
+      },
       { property: "og:title", content: "What-If Simulator — FinAdvisor XAI" },
-      { property: "og:description", content: "Interactive scenario testing for your financial health and projected corpus." },
+      {
+        property: "og:description",
+        content: "Interactive scenario testing for your financial health and projected corpus.",
+      },
     ],
   }),
   component: SimulatorPage,
@@ -211,7 +218,9 @@ function SimulatorPage() {
                 <span className="text-xs text-muted-foreground">Financial Health Score</span>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">{scenario.health.score}</span>
-                  <span className="text-xs text-muted-foreground">vs {base.health.score} saved</span>
+                  <span className="text-xs text-muted-foreground">
+                    vs {base.health.score} saved
+                  </span>
                 </div>
                 <Badge
                   variant={scenario.health.score >= base.health.score ? "default" : "destructive"}
@@ -230,7 +239,8 @@ function SimulatorPage() {
                   <span className="text-xl font-bold">{scenario.risk.riskClass}</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  Expected Return: {pct(scenario.rec.expectedReturn)} (was {pct(base.rec.expectedReturn)})
+                  Expected Return: {pct(scenario.rec.expectedReturn)} (was{" "}
+                  {pct(base.rec.expectedReturn)})
                 </p>
               </CardContent>
             </Card>
@@ -252,10 +262,12 @@ function SimulatorPage() {
           <Card className="card-elevated">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <TrendingUp className="size-4 text-primary" /> Projected Wealth Accumulation (Current vs Scenario)
+                <TrendingUp className="size-4 text-primary" /> Projected Wealth Accumulation
+                (Current vs Scenario)
               </CardTitle>
               <CardDescription>
-                Comparing projected portfolio growth under current profile versus the what-if simulated inputs
+                Comparing projected portfolio growth under current profile versus the what-if
+                simulated inputs
               </CardDescription>
             </CardHeader>
             <CardContent className="h-80">
@@ -329,7 +341,8 @@ function SimulatorPage() {
               <div className="flex flex-wrap gap-2">
                 {scenario.rec.allocation.map((slice) => (
                   <Badge key={slice.asset} variant="secondary" className="px-3 py-1.5 text-xs">
-                    {slice.asset}: <span className="ml-1 font-bold text-primary">{slice.percent}%</span>
+                    {slice.asset}:{" "}
+                    <span className="ml-1 font-bold text-primary">{slice.percent}%</span>
                   </Badge>
                 ))}
               </div>

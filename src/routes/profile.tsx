@@ -16,9 +16,16 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "Financial Profile — FinAdvisor XAI" },
-      { name: "description", content: "Capture income, expenses, savings, horizon and risk tolerance to drive the models." },
+      {
+        name: "description",
+        content:
+          "Capture income, expenses, savings, horizon and risk tolerance to drive the models.",
+      },
       { property: "og:title", content: "Financial Profile — FinAdvisor XAI" },
-      { property: "og:description", content: "Update your financial inputs and instantly refresh every analysis." },
+      {
+        property: "og:description",
+        content: "Update your financial inputs and instantly refresh every analysis.",
+      },
     ],
   }),
   component: ProfilePage,
@@ -42,14 +49,54 @@ const NUMERIC_FIELDS: {
   max: number;
 }[] = [
   { key: "age", label: "Age (years)", hint: "Valid range 18 to 100", max: 100 },
-  { key: "dependents", label: "Number of dependents", hint: "Children, parents, or spouse", max: 15 },
-  { key: "monthlyIncome", label: "Monthly income (₹)", hint: "Net monthly take-home salary or profit", max: 10_000_000 },
-  { key: "monthlyExpenses", label: "Monthly living expenses (₹)", hint: "Rent, food, utilities, lifestyle (excl. EMI)", max: 10_000_000 },
-  { key: "monthlyEmi", label: "Monthly EMI / Debt payments (₹)", hint: "Home loan, car loan, credit card EMIs", max: 10_000_000 },
-  { key: "currentSavings", label: "Liquid savings (₹)", hint: "Bank balance & liquid funds for emergencies", max: 1_000_000_000 },
-  { key: "existingInvestments", label: "Existing investments (₹)", hint: "Mutual funds, shares, PPF, EPF, gold", max: 1_000_000_000 },
-  { key: "monthlyInvestment", label: "Monthly SIP / Investment (₹)", hint: "Current amount regularly invested each month", max: 10_000_000 },
-  { key: "horizonYears", label: "Investment horizon (years)", hint: "Planned time period before withdrawals begin", max: 60 },
+  {
+    key: "dependents",
+    label: "Number of dependents",
+    hint: "Children, parents, or spouse",
+    max: 15,
+  },
+  {
+    key: "monthlyIncome",
+    label: "Monthly income (₹)",
+    hint: "Net monthly take-home salary or profit",
+    max: 10_000_000,
+  },
+  {
+    key: "monthlyExpenses",
+    label: "Monthly living expenses (₹)",
+    hint: "Rent, food, utilities, lifestyle (excl. EMI)",
+    max: 10_000_000,
+  },
+  {
+    key: "monthlyEmi",
+    label: "Monthly EMI / Debt payments (₹)",
+    hint: "Home loan, car loan, credit card EMIs",
+    max: 10_000_000,
+  },
+  {
+    key: "currentSavings",
+    label: "Liquid savings (₹)",
+    hint: "Bank balance & liquid funds for emergencies",
+    max: 1_000_000_000,
+  },
+  {
+    key: "existingInvestments",
+    label: "Existing investments (₹)",
+    hint: "Mutual funds, shares, PPF, EPF, gold",
+    max: 1_000_000_000,
+  },
+  {
+    key: "monthlyInvestment",
+    label: "Monthly SIP / Investment (₹)",
+    hint: "Current amount regularly invested each month",
+    max: 10_000_000,
+  },
+  {
+    key: "horizonYears",
+    label: "Investment horizon (years)",
+    hint: "Planned time period before withdrawals begin",
+    max: 60,
+  },
 ];
 
 function ProfilePage() {
@@ -111,14 +158,18 @@ function ProfilePage() {
   const emergencyMonths = outflow > 0 ? (draft.currentSavings / outflow).toFixed(1) : "0.0";
 
   return (
-    <AppShell title="User Financial Profile" subtitle="Your financial data powers the scoring engine, ML risk models, and allocation rules">
+    <AppShell
+      title="User Financial Profile"
+      subtitle="Your financial data powers the scoring engine, ML risk models, and allocation rules"
+    >
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Form Inputs */}
         <Card className="card-elevated lg:col-span-2">
           <CardHeader>
             <CardTitle>Personal & Financial Inputs</CardTitle>
             <CardDescription>
-              All monetary values are in Indian Rupees (INR). Validated with strict schema guardrails.
+              All monetary values are in Indian Rupees (INR). Validated with strict schema
+              guardrails.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -143,7 +194,9 @@ function ProfilePage() {
                   onChange={(e) => setDraft({ ...draft, occupation: e.target.value })}
                   placeholder="e.g. Software Engineer"
                 />
-                {errors["occupation"] && <p className="text-xs text-destructive">{errors["occupation"]}</p>}
+                {errors["occupation"] && (
+                  <p className="text-xs text-destructive">{errors["occupation"]}</p>
+                )}
               </div>
             </div>
 
@@ -162,7 +215,9 @@ function ProfilePage() {
                     min={0}
                     value={String(draft[f.key])}
                     onChange={(e) => handleNumChange(f.key, e.target.value, f.max)}
-                    className={errors[f.key] ? "border-destructive focus-visible:ring-destructive" : ""}
+                    className={
+                      errors[f.key] ? "border-destructive focus-visible:ring-destructive" : ""
+                    }
                   />
                   {errors[f.key] ? (
                     <p className="text-[11px] text-destructive">{errors[f.key]}</p>
@@ -178,7 +233,9 @@ function ProfilePage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <Label className="font-semibold">Risk Tolerance (Self-Reported)</Label>
-                  <span className="font-display font-bold text-primary">{draft.riskTolerance} / 10</span>
+                  <span className="font-display font-bold text-primary">
+                    {draft.riskTolerance} / 10
+                  </span>
                 </div>
                 <Slider
                   value={[draft.riskTolerance]}
@@ -188,14 +245,17 @@ function ProfilePage() {
                   onValueChange={([v]) => setDraft({ ...draft, riskTolerance: v ?? 5 })}
                 />
                 <p className="text-[11px] text-muted-foreground">
-                  1 = Extremely conservative (capital protection) · 10 = High risk capacity (aggressive growth)
+                  1 = Extremely conservative (capital protection) · 10 = High risk capacity
+                  (aggressive growth)
                 </p>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <Label className="font-semibold">Income Stability Perception</Label>
-                  <span className="font-display font-bold text-primary">{draft.incomeStability} / 10</span>
+                  <span className="font-display font-bold text-primary">
+                    {draft.incomeStability} / 10
+                  </span>
                 </div>
                 <Slider
                   value={[draft.incomeStability]}
@@ -205,7 +265,8 @@ function ProfilePage() {
                   onValueChange={([v]) => setDraft({ ...draft, incomeStability: v ?? 5 })}
                 />
                 <p className="text-[11px] text-muted-foreground">
-                  1 = Highly variable (freelance / commission) · 10 = Predictable, highly secure salary
+                  1 = Highly variable (freelance / commission) · 10 = Predictable, highly secure
+                  salary
                 </p>
               </div>
             </div>
@@ -260,14 +321,18 @@ function ProfilePage() {
               </div>
               <div className="flex justify-between border-b border-border pb-2">
                 <span className="text-muted-foreground">Monthly Surplus:</span>
-                <span className={`font-semibold ${surplus >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
+                <span
+                  className={`font-semibold ${surplus >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}
+                >
                   {currency(surplus)}
                 </span>
               </div>
               <div className="flex justify-between border-b border-border pb-2">
                 <span className="text-muted-foreground">Savings Rate:</span>
                 <span className="font-semibold">
-                  {draft.monthlyIncome > 0 ? `${((surplus / draft.monthlyIncome) * 100).toFixed(1)}%` : "0.0%"}
+                  {draft.monthlyIncome > 0
+                    ? `${((surplus / draft.monthlyIncome) * 100).toFixed(1)}%`
+                    : "0.0%"}
                 </span>
               </div>
               <div className="flex justify-between border-b border-border pb-2">
@@ -277,7 +342,9 @@ function ProfilePage() {
               <div className="flex justify-between border-b border-border pb-2">
                 <span className="text-muted-foreground">Debt-to-Income (EMI):</span>
                 <span className="font-semibold">
-                  {draft.monthlyIncome > 0 ? `${((draft.monthlyEmi / draft.monthlyIncome) * 100).toFixed(1)}%` : "0.0%"}
+                  {draft.monthlyIncome > 0
+                    ? `${((draft.monthlyEmi / draft.monthlyIncome) * 100).toFixed(1)}%`
+                    : "0.0%"}
                 </span>
               </div>
               <div className="flex justify-between pb-1">
@@ -292,7 +359,8 @@ function ProfilePage() {
           <Card className="card-elevated bg-secondary/20">
             <CardContent className="pt-5 text-xs text-muted-foreground leading-relaxed">
               <p className="font-semibold text-foreground mb-1">Security & Row-Level Privacy</p>
-              Your financial inputs are stored securely under your Supabase user ID with PostgreSQL Row Level Security (RLS) active. No other user has access to your records.
+              Your financial inputs are stored securely under your Supabase user ID with PostgreSQL
+              Row Level Security (RLS) active. No other user has access to your records.
             </CardContent>
           </Card>
         </div>

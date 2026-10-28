@@ -173,7 +173,10 @@ export function analyseHealth(p: FinancialProfile): HealthReport {
     grade,
     metrics,
     strengths: sorted.filter((m) => m.status !== "weak").slice(0, 3),
-    weaknesses: sorted.filter((m) => m.status !== "strong").reverse().slice(0, 3),
+    weaknesses: sorted
+      .filter((m) => m.status !== "strong")
+      .reverse()
+      .slice(0, 3),
     surplus,
     savingsRate: f.savingsRate,
     emergencyMonths: f.emergencyMonths,
@@ -190,7 +193,7 @@ interface FeatureSpec {
   key: keyof EngineeredFeatures;
   label: string;
   mean: number; // Baseline mean for SHAP explanation: E[x]
-  std: number;  // Standard deviation for normalization: (x - mean) / std
+  std: number; // Standard deviation for normalization: (x - mean) / std
   weights: Record<RiskClass, number>;
   format: (v: number) => string;
 }
@@ -303,9 +306,7 @@ export function predictRisk(p: FinancialProfile): RiskPrediction {
   }
 
   const probabilities = softmax(scores);
-  const riskClass = RISK_CLASSES.reduce((a, b) =>
-    probabilities[a] >= probabilities[b] ? a : b,
-  );
+  const riskClass = RISK_CLASSES.reduce((a, b) => (probabilities[a] >= probabilities[b] ? a : b));
 
   // Exact linear SHAP contributions for the winning predicted class
   const contributions: FeatureContribution[] = FEATURE_SPECS.map((spec) => {
@@ -377,7 +378,8 @@ export const MODEL_LEADERBOARD: ModelBenchmark[] = [
     f1: 0.899,
     rocAuc: 0.964,
     selected: true,
-    notes: "Deployed: selected for exact, closed-form SHAP explainability and low inference latency",
+    notes:
+      "Deployed: selected for exact, closed-form SHAP explainability and low inference latency",
   },
 ];
 

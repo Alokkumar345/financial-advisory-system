@@ -15,7 +15,14 @@ import {
 } from "recharts";
 import { AppShell } from "@/components/app/AppShell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Info, CheckCircle2, Award, GitBranch } from "lucide-react";
@@ -26,22 +33,51 @@ export const Route = createFileRoute("/explainability")({
   head: () => ({
     meta: [
       { title: "Explainable AI Dashboard — FinAdvisor XAI" },
-      { name: "description", content: "SHAP-style local and global feature importance behind every risk prediction." },
+      {
+        name: "description",
+        content: "SHAP-style local and global feature importance behind every risk prediction.",
+      },
       { property: "og:title", content: "Explainable AI Dashboard — FinAdvisor XAI" },
-      { property: "og:description", content: "Understand exactly which financial factors drove the model's output." },
+      {
+        property: "og:description",
+        content: "Understand exactly which financial factors drove the model's output.",
+      },
     ],
   }),
   component: XaiPage,
 });
 
 const PIPELINE_STEPS = [
-  { step: "Data Synthesis & Ingestion", detail: "Multi-cohort investor profiles with diverse demographic and cash-flow parameters." },
-  { step: "Data Cleaning & Bounds Checks", detail: "Negative value rejection, 18-100 age filters, and outlier winsorization." },
-  { step: "Feature Engineering", detail: "Ratios: savings rate, debt burden, emergency months, net-worth runway." },
-  { step: "Model Training & Selection", detail: "Trained XGBoost, Gradient Boosting, Random Forest, and Multinomial Logistic Regression." },
-  { step: "Cross-Validated Evaluation", detail: "Stratified 5-fold CV measuring Accuracy, Micro/Macro F1, and ROC-AUC." },
-  { step: "Exact Linear SHAP Explainability", detail: "Decomposes logits into closed-form feature contributions: weight × (x - E[x])." },
-  { step: "Rule-Guarded Allocation", detail: "Post-inference safeguards: 110-minus-age equity cap and emergency fund liquidity shift." },
+  {
+    step: "Data Synthesis & Ingestion",
+    detail: "Multi-cohort investor profiles with diverse demographic and cash-flow parameters.",
+  },
+  {
+    step: "Data Cleaning & Bounds Checks",
+    detail: "Negative value rejection, 18-100 age filters, and outlier winsorization.",
+  },
+  {
+    step: "Feature Engineering",
+    detail: "Ratios: savings rate, debt burden, emergency months, net-worth runway.",
+  },
+  {
+    step: "Model Training & Selection",
+    detail:
+      "Trained XGBoost, Gradient Boosting, Random Forest, and Multinomial Logistic Regression.",
+  },
+  {
+    step: "Cross-Validated Evaluation",
+    detail: "Stratified 5-fold CV measuring Accuracy, Micro/Macro F1, and ROC-AUC.",
+  },
+  {
+    step: "Exact Linear SHAP Explainability",
+    detail: "Decomposes logits into closed-form feature contributions: weight × (x - E[x]).",
+  },
+  {
+    step: "Rule-Guarded Allocation",
+    detail:
+      "Post-inference safeguards: 110-minus-age equity cap and emergency fund liquidity shift.",
+  },
 ];
 
 function XaiPage() {
@@ -71,7 +107,9 @@ function XaiPage() {
       {/* Model Narrative Banner */}
       <Alert className="mb-6 border-primary/30 bg-primary/5">
         <Brain className="size-5 text-primary" />
-        <AlertTitle className="text-base font-semibold">Natural-Language Decision Rationale</AlertTitle>
+        <AlertTitle className="text-base font-semibold">
+          Natural-Language Decision Rationale
+        </AlertTitle>
         <AlertDescription className="mt-1 text-sm text-foreground/90 leading-relaxed">
           {risk.narrative}
         </AlertDescription>
@@ -83,7 +121,8 @@ function XaiPage() {
           <CardHeader>
             <CardTitle>Local Explanation (This Prediction)</CardTitle>
             <CardDescription>
-              Exact signed contribution to {risk.riskClass} classification logit (Base intercept: {risk.baseValue.toFixed(2)})
+              Exact signed contribution to {risk.riskClass} classification logit (Base intercept:{" "}
+              {risk.baseValue.toFixed(2)})
             </CardDescription>
           </CardHeader>
           <CardContent className="h-96">
@@ -126,7 +165,8 @@ function XaiPage() {
           <CardHeader>
             <CardTitle>Global Feature Importance</CardTitle>
             <CardDescription>
-              Mean absolute weight magnitude across all 3 classes: <code className="text-xs bg-muted px-1.5 py-0.5 rounded">E[|w_c|]</code>
+              Mean absolute weight magnitude across all 3 classes:{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded">E[|w_c|]</code>
             </CardDescription>
           </CardHeader>
           <CardContent className="h-96">
@@ -145,9 +185,7 @@ function XaiPage() {
                   stroke="var(--color-muted-foreground)"
                   fontSize={11}
                 />
-                <Tooltip
-                  formatter={(val: number) => [`${val.toFixed(3)}`, "Global Importance"]}
-                />
+                <Tooltip formatter={(val: number) => [`${val.toFixed(3)}`, "Global Importance"]} />
                 <Bar dataKey="value" fill="var(--color-chart-1)" radius={4} />
               </BarChart>
             </ResponsiveContainer>
@@ -178,7 +216,9 @@ function XaiPage() {
                     <TableCell className="font-medium text-foreground">{c.label}</TableCell>
                     <TableCell>{c.display}</TableCell>
                     <TableCell className="text-right font-mono text-xs">
-                      {c.contribution > 0 ? `+${c.contribution.toFixed(3)}` : c.contribution.toFixed(3)}
+                      {c.contribution > 0
+                        ? `+${c.contribution.toFixed(3)}`
+                        : c.contribution.toFixed(3)}
                     </TableCell>
                     <TableCell className="text-right">
                       {c.contribution >= 0 ? (
@@ -210,7 +250,10 @@ function XaiPage() {
                   Benchmark evaluation across candidate architectures (Stratified 5-Fold CV)
                 </CardDescription>
               </div>
-              <Badge variant="outline" className="text-xs border-amber-500/40 text-amber-600 dark:text-amber-400">
+              <Badge
+                variant="outline"
+                className="text-xs border-amber-500/40 text-amber-600 dark:text-amber-400"
+              >
                 Sample Benchmark Data
               </Badge>
             </div>
@@ -228,10 +271,7 @@ function XaiPage() {
               </TableHeader>
               <TableBody>
                 {MODEL_LEADERBOARD.map((m) => (
-                  <TableRow
-                    key={m.model}
-                    className={m.selected ? "bg-primary/5 font-medium" : ""}
-                  >
+                  <TableRow key={m.model} className={m.selected ? "bg-primary/5 font-medium" : ""}>
                     <TableCell>
                       <div className="font-semibold text-foreground">{m.model}</div>
                       <div className="text-[11px] text-muted-foreground">{m.notes}</div>
@@ -256,8 +296,13 @@ function XaiPage() {
             </Table>
 
             <div className="rounded-lg bg-secondary/40 p-3 text-xs text-muted-foreground leading-relaxed">
-              <span className="font-semibold text-foreground">Why Logistic Regression was deployed: </span>
-              While ensemble models (XGBoost) scored slightly higher (+2.4% accuracy), Multinomial Logistic Regression was chosen for deployment because it yields <strong>exact closed-form Shapley feature attributions</strong> without sampling error, guaranteeing instantaneous, deterministic explainability.
+              <span className="font-semibold text-foreground">
+                Why Logistic Regression was deployed:{" "}
+              </span>
+              While ensemble models (XGBoost) scored slightly higher (+2.4% accuracy), Multinomial
+              Logistic Regression was chosen for deployment because it yields{" "}
+              <strong>exact closed-form Shapley feature attributions</strong> without sampling
+              error, guaranteeing instantaneous, deterministic explainability.
             </div>
           </CardContent>
         </Card>
@@ -275,16 +320,17 @@ function XaiPage() {
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {PIPELINE_STEPS.map((s, idx) => (
-                <div key={s.step} className="rounded-xl border border-border/80 bg-card p-4 space-y-1.5">
+                <div
+                  key={s.step}
+                  className="rounded-xl border border-border/80 bg-card p-4 space-y-1.5"
+                >
                   <div className="flex items-center gap-2">
                     <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                       {idx + 1}
                     </span>
                     <span className="font-semibold text-sm text-foreground">{s.step}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed pl-8">
-                    {s.detail}
-                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed pl-8">{s.detail}</p>
                 </div>
               ))}
             </div>
@@ -296,7 +342,9 @@ function XaiPage() {
         <Info className="size-4 text-primary" />
         <AlertTitle className="text-sm font-semibold">Model Transparency Notice</AlertTitle>
         <AlertDescription className="text-xs text-muted-foreground leading-relaxed mt-1">
-          The benchmark statistics presented above are derived from offline cross-validation datasets. All algorithmic explanations reflect the mathematical contribution of your profile features to the deployed multinomial scoring engine.
+          The benchmark statistics presented above are derived from offline cross-validation
+          datasets. All algorithmic explanations reflect the mathematical contribution of your
+          profile features to the deployed multinomial scoring engine.
         </AlertDescription>
       </Alert>
     </AppShell>

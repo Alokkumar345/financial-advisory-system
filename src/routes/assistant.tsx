@@ -15,9 +15,15 @@ export const Route = createFileRoute("/assistant")({
   head: () => ({
     meta: [
       { title: "AI Financial Assistant — FinAdvisor XAI" },
-      { name: "description", content: "Ask questions about your dashboard, metrics, risk profile and recommendations." },
+      {
+        name: "description",
+        content: "Ask questions about your dashboard, metrics, risk profile and recommendations.",
+      },
       { property: "og:title", content: "AI Financial Assistant — FinAdvisor XAI" },
-      { property: "og:description", content: "A cautious, explanation-first assistant for your financial data." },
+      {
+        property: "og:description",
+        content: "A cautious, explanation-first assistant for your financial data.",
+      },
     ],
   }),
   component: AssistantPage,
@@ -60,7 +66,10 @@ function AssistantPage() {
     `Cash Flow: Monthly Income ${currency(profile.monthlyIncome)}, Expenses ${currency(profile.monthlyExpenses)}, EMI ${currency(profile.monthlyEmi)}, Monthly Surplus ${currency(health.surplus)}.`,
     `Assets: Liquid Savings ${currency(profile.currentSavings)}, Existing Investments ${currency(profile.existingInvestments)}, Monthly SIP ${currency(profile.monthlyInvestment)}, Horizon ${profile.horizonYears} years.`,
     `Health Score: ${health.score}/100 (${health.grade}); Savings Rate ${pct(health.savingsRate)}; Emergency Buffer ${health.emergencyMonths.toFixed(1)} months; Debt Burden ${pct(health.debtBurden)}.`,
-    `Risk Profile: ${risk.riskClass} at ${pct(risk.confidence)} confidence. Top SHAP Drivers: ${risk.contributions.slice(0, 4).map((c) => `${c.label} (${c.display})`).join(", ")}.`,
+    `Risk Profile: ${risk.riskClass} at ${pct(risk.confidence)} confidence. Top SHAP Drivers: ${risk.contributions
+      .slice(0, 4)
+      .map((c) => `${c.label} (${c.display})`)
+      .join(", ")}.`,
     `Recommended Allocation: ${recommendation.allocation.map((a) => `${a.asset} ${a.percent}%`).join(", ")}; Expected Return ${pct(recommendation.expectedReturn)}; Volatility ${pct(recommendation.volatility)}.`,
     `Goals: ${profile.goals.map((g) => `${g.name} (${g.kind}): ${currency(g.targetAmount)} in ${g.years} yrs, saved ${currency(g.saved)}`).join("; ") || "None specified"}.`,
   ].join("\n");
@@ -143,7 +152,9 @@ function AssistantPage() {
                   <Bot className="size-4" />
                 </div>
                 <div>
-                  <CardTitle className="text-sm font-semibold">FinAdvisor Intelligent Agent</CardTitle>
+                  <CardTitle className="text-sm font-semibold">
+                    FinAdvisor Intelligent Agent
+                  </CardTitle>
                   <CardDescription className="text-[11px]">
                     Live context attached · Strictly under 200 words · Prudent decision support
                   </CardDescription>
@@ -215,7 +226,8 @@ function AssistantPage() {
               </Button>
             </form>
             <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
-              Educational decision-support assistant. Does not promise returns. Consult a SEBI-registered adviser for financial execution.
+              Educational decision-support assistant. Does not promise returns. Consult a
+              SEBI-registered adviser for financial execution.
             </p>
           </div>
         </Card>

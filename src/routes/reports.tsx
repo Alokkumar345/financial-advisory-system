@@ -2,7 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/app/AppShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useAnalysis, useProfile } from "@/lib/finance/store";
 import { currency, pct, planGoal } from "@/lib/finance/engine";
@@ -12,9 +19,15 @@ export const Route = createFileRoute("/reports")({
   head: () => ({
     meta: [
       { title: "Reports & Export — FinAdvisor XAI" },
-      { name: "description", content: "Export your financial summary, risk profile and allocation as JSON, CSV or PDF." },
+      {
+        name: "description",
+        content: "Export your financial summary, risk profile and allocation as JSON, CSV or PDF.",
+      },
       { property: "og:title", content: "Reports & Export — FinAdvisor XAI" },
-      { property: "og:description", content: "A shareable summary of your plan, metrics and model explanations." },
+      {
+        property: "og:description",
+        content: "A shareable summary of your plan, metrics and model explanations.",
+      },
     ],
   }),
   component: ReportsPage,
@@ -95,7 +108,12 @@ function ReportsPage() {
       ["Cash Flow", "Monthly Surplus", health.surplus, "INR"],
       ["Health", "Health Score", `${health.score}/100`, health.grade],
       ["Health", "Savings Rate", pct(health.savingsRate), "Target: 20-30%"],
-      ["Health", "Emergency Buffer", `${health.emergencyMonths.toFixed(1)} Months`, "Target: 6 months"],
+      [
+        "Health",
+        "Emergency Buffer",
+        `${health.emergencyMonths.toFixed(1)} Months`,
+        "Target: 6 months",
+      ],
       ["Risk", "Classified Risk Profile", risk.riskClass, `Confidence: ${pct(risk.confidence)}`],
       ["Risk", "Risk Narrative", risk.narrative.replace(/,/g, ";"), ""],
       ...recommendation.allocation.map((a) => [
@@ -148,7 +166,11 @@ function ReportsPage() {
               <Button variant="outline" size="sm" onClick={handleDownloadCSV}>
                 <FileSpreadsheet className="mr-1.5 size-4" /> Download CSV
               </Button>
-              <Button size="sm" onClick={handlePrint} className="bg-primary text-primary-foreground">
+              <Button
+                size="sm"
+                onClick={handlePrint}
+                className="bg-primary text-primary-foreground"
+              >
                 <Printer className="mr-1.5 size-4" /> Print / Save as PDF
               </Button>
             </div>
@@ -166,7 +188,9 @@ function ReportsPage() {
                 </div>
                 <div>
                   <h1 className="font-display text-2xl font-bold tracking-tight">FinAdvisor XAI</h1>
-                  <p className="text-xs text-muted-foreground">Explainable Wealth Intelligence Report</p>
+                  <p className="text-xs text-muted-foreground">
+                    Explainable Wealth Intelligence Report
+                  </p>
                 </div>
               </div>
             </div>
@@ -174,7 +198,9 @@ function ReportsPage() {
             <div className="text-right text-xs text-muted-foreground">
               <p className="font-semibold text-foreground">Client: {profile.name}</p>
               <p>Generated: {new Date().toLocaleDateString("en-IN", { dateStyle: "long" })}</p>
-              <p>Reference: {profile.occupation} · Age {profile.age}</p>
+              <p>
+                Reference: {profile.occupation} · Age {profile.age}
+              </p>
             </div>
           </div>
 
@@ -189,7 +215,8 @@ function ReportsPage() {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Weighted assessment across savings discipline, debt burden, liquid reserves, and core expenses.
+              Weighted assessment across savings discipline, debt burden, liquid reserves, and core
+              expenses.
             </p>
 
             <Table>
@@ -206,8 +233,12 @@ function ReportsPage() {
                   <TableRow key={m.key}>
                     <TableCell className="font-medium text-foreground">{m.label}</TableCell>
                     <TableCell>{m.display}</TableCell>
-                    <TableCell className="text-right text-muted-foreground">{pct(m.weight, 0)}</TableCell>
-                    <TableCell className="text-right font-semibold">{Math.round(m.score)}/100</TableCell>
+                    <TableCell className="text-right text-muted-foreground">
+                      {pct(m.weight, 0)}
+                    </TableCell>
+                    <TableCell className="text-right font-semibold">
+                      {Math.round(m.score)}/100
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -239,7 +270,9 @@ function ReportsPage() {
                     <TableCell className="font-medium text-foreground">{c.label}</TableCell>
                     <TableCell>{c.display}</TableCell>
                     <TableCell className="text-right font-mono text-xs">
-                      {c.contribution > 0 ? `+${c.contribution.toFixed(3)}` : c.contribution.toFixed(3)}
+                      {c.contribution > 0
+                        ? `+${c.contribution.toFixed(3)}`
+                        : c.contribution.toFixed(3)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -254,7 +287,14 @@ function ReportsPage() {
                 3. Recommended Strategic Asset Mix
               </h2>
               <div className="text-right text-xs text-muted-foreground">
-                Expected Return: <span className="font-semibold text-foreground">{pct(recommendation.expectedReturn)}</span> · Volatility: <span className="font-semibold text-foreground">{pct(recommendation.volatility)}</span>
+                Expected Return:{" "}
+                <span className="font-semibold text-foreground">
+                  {pct(recommendation.expectedReturn)}
+                </span>{" "}
+                · Volatility:{" "}
+                <span className="font-semibold text-foreground">
+                  {pct(recommendation.volatility)}
+                </span>
               </div>
             </div>
 
@@ -321,7 +361,12 @@ function ReportsPage() {
           <div className="border-t border-border pt-6 text-[11px] text-muted-foreground leading-relaxed space-y-1">
             <p className="font-semibold text-foreground">Disclaimer & Compliance Statement:</p>
             <p>
-              FinAdvisor XAI is an automated financial planning and educational software system. It uses statistical models (multinomial logistic regression) and mathematical heuristics to illustrate financial health and potential asset distributions. This report does NOT represent investment advice, tax planning, or guaranteed return promises under Securities and Exchange Board of India (SEBI) regulations. Always consult a certified, SEBI-registered Investment Adviser (RIA) before committing capital.
+              FinAdvisor XAI is an automated financial planning and educational software system. It
+              uses statistical models (multinomial logistic regression) and mathematical heuristics
+              to illustrate financial health and potential asset distributions. This report does NOT
+              represent investment advice, tax planning, or guaranteed return promises under
+              Securities and Exchange Board of India (SEBI) regulations. Always consult a certified,
+              SEBI-registered Investment Adviser (RIA) before committing capital.
             </p>
           </div>
         </div>
